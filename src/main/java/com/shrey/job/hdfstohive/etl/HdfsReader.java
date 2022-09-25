@@ -22,7 +22,7 @@ public class HdfsReader {
 
     public Dataset<Row> read() {
         try {
-            logger.info("=========== Read data from CSV file : start ==========");
+            logger.info("##### Read data from CSV file : start #####");
             // Create schema
             StructType structure = new StructType(
                     new StructField[]{
@@ -51,7 +51,7 @@ public class HdfsReader {
 
             // Display sample records
             datasetEcoManSurvey.show(10, false);
-            logger.info("=========== Read data from CSV file : end ==========");
+            logger.info("##### Read data from CSV file : end #####");
 
             return datasetEcoManSurvey;
         } catch (Exception e) {

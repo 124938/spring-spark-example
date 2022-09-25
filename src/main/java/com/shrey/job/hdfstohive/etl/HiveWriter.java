@@ -20,28 +20,46 @@ public class HiveWriter {
     public void write(final Dataset<Row> dataset) {
         try {
 
-            logger.info("=========== Write data to hive : start ==========");
+            logger.info("##### Write data to hive : start #####");
 
-            this.sparkSession.sql("show databases").show(100, false);
-            this.sparkSession.sql("create database if not exists test_db").show(100, false);
-            this.sparkSession.sql("show tables in test_db").show(100, false);
+            // Create hive database if not exists
+            this.sparkSession
+                    .sql("show databases")
+                    .show(100, false);
 
-            // Writ data to hive table
+            this.sparkSession
+                    .sql("create database if not exists test_db")
+                    .show(100, false);
+
+            this.sparkSession
+                    .sql("show tables in test_db")
+                    .show(100, false);
+
+            // Write data to hive table
             dataset.write()
                     .format("parquet")
                     .mode(SaveMode.Overwrite)
                     .saveAsTable("test_db.economic_survey_of_manufacturing_june_2022");
-            logger.info("=========== Write data to hive : end ==========");
 
+            logger.info("#####= Write data to hive : end #####");
 
-            logger.info("=========== Verification of hive data : start ==========");
-            this.sparkSession.sql("show tables in test_db").show(100, false);
+            logger.info("#####= Verification of hive data : start #####");
+            this.sparkSession
+                    .sql("show tables in test_db")
+                    .show(100, false);
 
             // Verify data from hive table
-            this.sparkSession.sql("select count(1) from test_db.economic_survey_of_manufacturing_june_2022").show(100, false);
-            Dataset<Row> testDS = this.sparkSession.sql("select * from test_db.economic_survey_of_manufacturing_june_2022");
-            testDS.show(20, false);
-            logger.info("=========== Verification of hive data : end ==========");
+            this.sparkSession
+                    .sql("select count(1) from test_db.economic_survey_of_manufacturing_june_2022")
+                    .show(100, false);
+
+            Dataset<Row> ecoSurManDS = this.sparkSession
+                    .sql("select * from test_db.economic_survey_of_manufacturing_june_2022");
+
+            ecoSurManDS.printSchema();
+            ecoSurManDS.show(20, false);
+
+            logger.info("#####= Verification of hive data : end #####");
         } catch (Exception e) {
             throw new RuntimeException("Unable to write data to hive", e);
         }
