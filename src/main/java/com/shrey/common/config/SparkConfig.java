@@ -15,11 +15,16 @@ public class SparkConfig {
     @Value("${spark.master}")
     private String master;
 
+    @Value("${spark.warehouse}")
+    private String warehouseDir;
+
     private SparkConf buildSparkConf() {
         SparkConf conf = new SparkConf();
         conf.setAppName(this.name);
         conf.setMaster(this.master);
-        conf.set("spark.sql.warehouse.dir", "/home/asus/tech_soft/hive");
+        if (this.master.startsWith("local")) {
+            conf.set("spark.sql.warehouse.dir", warehouseDir);
+        }
 
         return conf;
     }
