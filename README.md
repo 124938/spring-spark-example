@@ -20,11 +20,4 @@ CONTAINER ID   IMAGE                          COMMAND                  CREATED  
 SID
 user : system
 pwd : Test@123
-
--- Create user
-docker exec 24e3f72dab5c createAppUser docker_app_user docker_app_pwd
-XEPDB1
-docker_app_user
-docker_app_pwd
-
 ```
